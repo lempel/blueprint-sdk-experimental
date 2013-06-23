@@ -1,3 +1,16 @@
+/*
+ License:
+
+ blueprint-sdk is licensed under the terms of Eclipse Public License(EPL) v1.0
+ (http://www.eclipse.org/legal/epl-v10.html)
+
+
+ Distribution:
+
+ Repository - https://github.com/lempel/blueprint-sdk.git
+ Blog - http://lempel.egloos.com
+ */
+
 package blueprint.sdk.experimental.florist.db;
 
 import java.io.IOException;
@@ -15,9 +28,7 @@ import javax.servlet.ServletResponse;
  * Add this Servlet Filter to web.xml<br>
  * 
  * @author Simon Lee
- * @version $Revision$
  * @since 2009. 3. 11.
- * @last $Date$
  */
 public class ConnectionFilter implements Filter {
 	public void destroy() {
