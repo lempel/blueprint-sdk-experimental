@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="lib/poi/junit-3.8.1.jar"/>
+	<classpathentry kind="lib" path="lib/poi/log4j-1.2.13.jar"/>
+	<classpathentry kind="lib" path="lib/poi/poi-3.8-20120326.jar"/>
+	<classpathentry kind="lib" path="lib/poi/poi-excelant-3.8-20120326.jar"/>
+	<classpathentry kind="lib" path="lib/poi/poi-ooxml-3.8-20120326.jar"/>
+	<classpathentry kind="lib" path="lib/poi/poi-ooxml-schemas-3.8-20120326.jar"/>
+	<classpathentry kind="lib" path="lib/poi/poi-scratchpad-3.8-20120326.jar"/>
+	<classpathentry kind="lib" path="lib/poi/stax-api-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/poi/xmlbeans-2.3.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/blueprint-sdk"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/blueprint-sdk-util"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/blueprint"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/blueprint-sdk-logger"/>
+	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="lib/jakarta/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jakarta/commons-dbcp-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/jakarta/commons-pool-1.6.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
