@@ -16,7 +16,7 @@ package blueprint.sdk.experimental.aio;
 import java.nio.channels.Selector;
 import java.util.List;
 
-import bluerpint.sdk.util.jvm.shutdown.Terminatable;
+import blueprint.sdk.util.jvm.shutdown.Terminatable;
 
 /**
  * Load Balancer for Selector list

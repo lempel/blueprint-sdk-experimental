@@ -21,8 +21,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import blueprint.sdk.experimental.aio.SelectorLoadBalancer;
 import blueprint.sdk.experimental.aio.SocketChannelWrapper;
 import blueprint.sdk.experimental.aio.protocol.Protocol;
-import bluerpint.sdk.util.Validator;
-import bluerpint.sdk.util.jvm.shutdown.Terminatable;
+import blueprint.sdk.util.Validator;
+import blueprint.sdk.util.jvm.shutdown.Terminatable;
 
 /**
  * Provides basic functions and guidelines for client session implementation.<br>
