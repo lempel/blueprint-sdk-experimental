@@ -23,7 +23,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 
-import lempel.blueprint.base.concurrent.TimeoutHandler;
+import blueprint.sdk.core.concurrent.TimeoutHandler;
 import bluerpint.sdk.util.Validator;
 import bluerpint.sdk.util.jvm.shutdown.Terminatable;
 

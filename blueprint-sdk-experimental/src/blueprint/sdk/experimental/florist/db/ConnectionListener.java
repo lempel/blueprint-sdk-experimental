@@ -98,7 +98,7 @@ public class ConnectionListener implements ServletContextListener {
 						// lookup DataSource from JNDI
 						// FIXME JNDI support is not tested yet. SPI or Factory
 						// is needed here.
-						LOGGER.warning(this, "JNDI DataSource support needs more hands on!");
+						LOGGER.warn(this, "JNDI DataSource support needs more hands on!");
 						dsr = (DataSource) initContext.lookup(prop.getProperty("JNDI_NAME"));
 					} else {
 						// create new BasicDataSource

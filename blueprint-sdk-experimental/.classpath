@@ -12,12 +12,11 @@
 	<classpathentry kind="lib" path="lib/poi/stax-api-1.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/poi/xmlbeans-2.3.0.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/blueprint-sdk"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/blueprint-sdk-util"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/blueprint"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/blueprint-sdk-logger"/>
 	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta/commons-collections-3.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta/commons-dbcp-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta/commons-pool-1.6.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/blueprint-sdk-logger"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -15,12 +15,12 @@ package blueprint.sdk.experimental.aio;
 
 import java.nio.channels.ClosedChannelException;
 
+import blueprint.sdk.core.concurrent.JobQueue;
+import blueprint.sdk.core.concurrent.Worker;
 import blueprint.sdk.experimental.aio.session.Session;
 import blueprint.sdk.logger.Logger;
 import bluerpint.sdk.util.Validator;
 
-import lempel.blueprint.base.concurrent.JobQueue;
-import lempel.blueprint.base.concurrent.Worker;
 
 /**
  * Process each & every element from JobQueue, one at a time.
