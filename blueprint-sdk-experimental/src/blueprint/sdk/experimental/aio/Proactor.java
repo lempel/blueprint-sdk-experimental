@@ -30,8 +30,8 @@ import blueprint.sdk.core.concurrent.TimeoutHandler;
 import blueprint.sdk.core.concurrent.WorkerGroup;
 import blueprint.sdk.experimental.aio.session.Session;
 import blueprint.sdk.logger.Logger;
+import blueprint.sdk.util.Terminatable;
 import blueprint.sdk.util.Validator;
-import blueprint.sdk.util.jvm.shutdown.Terminatable;
 import blueprint.sdk.util.jvm.shutdown.Terminator;
 
 /**

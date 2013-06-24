@@ -24,8 +24,8 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 
 import blueprint.sdk.core.concurrent.TimeoutHandler;
+import blueprint.sdk.util.Terminatable;
 import blueprint.sdk.util.Validator;
-import blueprint.sdk.util.jvm.shutdown.Terminatable;
 
 /**
  * Provides EASIER way to handle SocketChannel.<br>

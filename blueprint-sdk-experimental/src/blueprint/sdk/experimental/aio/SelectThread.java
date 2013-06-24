@@ -19,7 +19,7 @@ import java.nio.channels.Selector;
 import java.util.Set;
 
 import blueprint.sdk.logger.Logger;
-import blueprint.sdk.util.jvm.shutdown.Terminatable;
+import blueprint.sdk.util.Terminatable;
 
 /**
  * Polls a Selector & invokes a task

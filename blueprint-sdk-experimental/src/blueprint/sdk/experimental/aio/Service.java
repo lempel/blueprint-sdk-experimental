@@ -24,8 +24,8 @@ import java.nio.channels.SocketChannel;
 import lempel.blueprint.base.io.IpFilter;
 import blueprint.sdk.core.concurrent.TimeoutHandler;
 import blueprint.sdk.logger.Logger;
+import blueprint.sdk.util.Terminatable;
 import blueprint.sdk.util.Validator;
-import blueprint.sdk.util.jvm.shutdown.Terminatable;
 
 /**
  * A Service<br>
