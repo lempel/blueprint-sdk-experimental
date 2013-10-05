@@ -35,7 +35,7 @@ import blueprint.sdk.util.Validator;
  * If you are willing to override terminate() method, make sure to call
  * 'map.remove(this)'.<br>
  * 
- * @author Simon Lee
+ * @author Sangmin Lee
  * @since 2008. 11. 27.
  */
 public abstract class Session implements Terminatable {

@@ -39,7 +39,7 @@ import blueprint.sdk.logger.Logger;
  * Even though general JNDI DataSources can be used with blueprint.florist<br>
  * Add this ServletContextListener to web.xml<br>
  * 
- * @author Simon Lee
+ * @author Sangmin Lee
  * @since 2009. 3. 12.
  */
 public class ConnectionListener implements ServletContextListener {

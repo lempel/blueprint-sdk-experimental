@@ -21,7 +21,7 @@ import blueprint.sdk.util.Terminatable;
 /**
  * Load Balancer for Selector list
  * 
- * @author Simon Lee
+ * @author Sangmin Lee
  * @since 2008. 12. 5.
  */
 public class SelectorLoadBalancer implements Terminatable {

@@ -24,7 +24,7 @@ import blueprint.sdk.experimental.aio.protocol.EchoProtocol;
 /**
  * Echo Session
  * 
- * @author Simon Lee
+ * @author Sangmin Lee
  * @since 2008. 12. 1.
  */
 public class EchoSession extends Session {

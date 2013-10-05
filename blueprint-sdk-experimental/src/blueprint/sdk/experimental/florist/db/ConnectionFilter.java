@@ -27,7 +27,7 @@ import javax.servlet.ServletResponse;
  * All JDBC Connections will be closed by this filter<br>
  * Add this Servlet Filter to web.xml<br>
  * 
- * @author Simon Lee
+ * @author Sangmin Lee
  * @since 2009. 3. 11.
  */
 public class ConnectionFilter implements Filter {

@@ -24,7 +24,7 @@ import blueprint.sdk.util.Terminatable;
 /**
  * Polls a Selector & invokes a task
  * 
- * @author Simon Lee
+ * @author Sangmin Lee
  * @since 2008. 11. 26.
  */
 public abstract class SelectThread extends Thread implements Terminatable {

@@ -25,7 +25,7 @@ import blueprint.sdk.experimental.aio.SocketChannelWrapper;
 /**
  * Simple HTTP Protocol Implementation
  * 
- * @author Simon Lee
+ * @author Sangmin Lee
  * @since 2008. 12. 12.
  */
 public class SimpleHttpProtocol extends Protocol {

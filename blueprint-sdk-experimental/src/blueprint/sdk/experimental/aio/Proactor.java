@@ -37,7 +37,7 @@ import blueprint.sdk.util.jvm.shutdown.Terminator;
 /**
  * Proactor for Service
  * 
- * @author Simon Lee
+ * @author Sangmin Lee
  * @since 2008. 11. 25.
  */
 public class Proactor implements Terminatable {
@@ -222,7 +222,7 @@ public class Proactor implements Terminatable {
 	/**
 	 * select & read
 	 * 
-	 * @author Simon Lee
+	 * @author Sangmin Lee
 	 * @version $Revision$
 	 * @create 2008. 11. 26.
 	 * @since 1.5

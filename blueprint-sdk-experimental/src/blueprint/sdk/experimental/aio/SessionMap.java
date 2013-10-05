@@ -22,7 +22,7 @@ import blueprint.sdk.experimental.aio.session.Session;
  * Map of Sessions (to SocketChannel's hashcode)<br>
  * No specific purpose. Just for marking.<br>
  * 
- * @author Simon Lee
+ * @author Sangmin Lee
  * @since 2008. 11. 28.
  */
 public class SessionMap extends ConcurrentHashMap<Integer, Session> {

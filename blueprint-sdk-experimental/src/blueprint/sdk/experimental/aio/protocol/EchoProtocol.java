@@ -25,7 +25,7 @@ import blueprint.sdk.experimental.aio.SocketChannelWrapper;
 /**
  * Echo Protocol for Reference
  * 
- * @author Simon Lee
+ * @author Sangmin Lee
  * @since 2009. 2. 11.
  */
 public class EchoProtocol extends Protocol {

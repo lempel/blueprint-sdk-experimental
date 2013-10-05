@@ -47,7 +47,7 @@ import blueprint.sdk.util.StringUtil;
  * System.out.println(cellValues);<br>
  * <br>
  * 
- * @author Simon Lee
+ * @author Sangmin Lee
  * @since 2009. 3. 9.
  */
 public class XlsReader {

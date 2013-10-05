@@ -28,7 +28,7 @@ import blueprint.sdk.experimental.aio.SocketChannelWrapper;
  * Use readSelectorLB.register(SocketChannelWrapper, int) for read operation.<br>
  * Check wrapper.isValid() before every read/write operations.<br>
  * 
- * @author Simon Lee
+ * @author Sangmin Lee
  * @since 2008. 12. 12.
  */
 public abstract class Protocol {

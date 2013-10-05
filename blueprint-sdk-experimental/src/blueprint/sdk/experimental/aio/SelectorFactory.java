@@ -27,7 +27,7 @@ import blueprint.sdk.util.Validator;
  * Selector Factory to recycle Selectors<br>
  * Opening a Selector cost a lot. So recycle as many as possible.<br>
  * 
- * @author Simon Lee
+ * @author Sangmin Lee
  * @since 2008. 12. 5.
  */
 public class SelectorFactory {

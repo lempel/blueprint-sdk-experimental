@@ -38,7 +38,7 @@ import blueprint.sdk.util.Validator;
  * s1.getIpFilter().allow("127.0.0.1");<br>
  * s1.bind("localhost", 1112, true, 5);<br>
  * 
- * @author Simon Lee
+ * @author Sangmin Lee
  * @since 2008. 11. 25.
  */
 public class Service implements Runnable, Terminatable {

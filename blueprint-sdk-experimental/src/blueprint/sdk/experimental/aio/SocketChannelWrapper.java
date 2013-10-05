@@ -31,7 +31,7 @@ import blueprint.sdk.util.Validator;
  * Provides EASIER way to handle SocketChannel.<br>
  * <b>This class is NOT THREAD SAFE.</b><br>
  * 
- * @author Simon Lee
+ * @author Sangmin Lee
  * @since 2008. 11. 25.
  */
 public class SocketChannelWrapper implements Terminatable {

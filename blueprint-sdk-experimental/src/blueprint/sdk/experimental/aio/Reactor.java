@@ -25,7 +25,7 @@ import blueprint.sdk.util.Validator;
 /**
  * Process each & every element from JobQueue, one at a time.
  * 
- * @author Simon Lee
+ * @author Sangmin Lee
  * @since 2008. 11. 26.
  */
 public class Reactor extends Worker<Object> {

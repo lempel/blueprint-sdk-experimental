@@ -38,7 +38,7 @@ import javax.sql.DataSource;
  * // do what you have to do<br>
  * }<br>
  * 
- * @author Simon Lee
+ * @author Sangmin Lee
  * @since 2009. 3. 11.
  */
 public class ConnectionHelper {
