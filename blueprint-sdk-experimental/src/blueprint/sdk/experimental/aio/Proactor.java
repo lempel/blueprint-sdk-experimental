@@ -72,23 +72,14 @@ public class Proactor implements Terminatable {
 	 *            read buffer size in byte
 	 * @throws IOException
 	 *             Failed to open a Selector
-	 * @throws IllegalArgumentException
-	 *             Thrown by WorkerGroup
-	 * @throws SecurityException
-	 *             Thrown by WorkerGroup
-	 * @throws InstantiationException
-	 *             Thrown by WorkerGroup
-	 * @throws IllegalAccessException
-	 *             Thrown by WorkerGroup
-	 * @throws InvocationTargetException
-	 *             Thrown by WorkerGroup
 	 * @throws NoSuchMethodException
-	 *             Thrown by WorkerGroup
+	 *             Can't get constructor for session
+	 * @throws SecurityException
+	 *             Can't get constructor for session
 	 */
 	public Proactor(final Class<Reactor> reactorClass, final int reactorCount, final int readerCount,
 			final Class<? extends Session> sessionClass, final int readBufferSize) throws IOException,
-			IllegalArgumentException, SecurityException, InstantiationException, IllegalAccessException,
-			InvocationTargetException, NoSuchMethodException {
+			SecurityException, NoSuchMethodException {
 		if (readerCount == 0) {
 			throw new IllegalArgumentException("readerThreads must be greater than 0");
 		}
