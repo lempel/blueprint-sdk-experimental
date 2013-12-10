@@ -21,7 +21,6 @@ import blueprint.sdk.experimental.aio.session.Session;
 import blueprint.sdk.logger.Logger;
 import blueprint.sdk.util.Validator;
 
-
 /**
  * Process each & every element from JobQueue, one at a time.
  * 
@@ -33,8 +32,8 @@ public class Reactor extends Worker<Object> {
 
 	private transient boolean running = false;
 
-	public Reactor(final JobQueue<Object> jobQueue) {
-		super(jobQueue);
+	public Reactor(final JobQueue<Object> jobQueue, final Object deathMonitor) {
+		super(jobQueue, deathMonitor);
 	}
 
 	public boolean isValid() {

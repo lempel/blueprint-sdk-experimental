@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import blueprint.sdk.core.concurrent.JobQueue;
 import blueprint.sdk.core.concurrent.TimeoutHandler;
 import blueprint.sdk.core.concurrent.WorkerGroup;
 import blueprint.sdk.experimental.aio.session.Session;
@@ -111,7 +112,7 @@ public class Proactor implements Terminatable {
 			readThreads.add(thread);
 		}
 
-		reactors = new WorkerGroup(reactorClass, reactorCount);
+		reactors = new WorkerGroup(new JobQueue<Object>(), reactorClass, reactorCount);
 
 		Terminator term = Terminator.getInstance();
 		term.register(this);
