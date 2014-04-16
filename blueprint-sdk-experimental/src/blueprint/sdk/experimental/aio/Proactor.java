@@ -46,7 +46,7 @@ public class Proactor implements Terminatable {
 
 	private transient final SelectorLoadBalancer readSelectorLB;
 	private transient final List<ReadThread> readThreads;
-	private transient final WorkerGroup reactors;
+	private transient final WorkerGroup<Object, JobQueue<Object>> reactors;
 	/** map of Sessions (to SocketChannel's hashcode) */
 	private transient final ConcurrentHashMap<Integer, Session> sessionMap;
 	private final Constructor<? extends Session> sessionCons;
@@ -103,7 +103,7 @@ public class Proactor implements Terminatable {
 			readThreads.add(thread);
 		}
 
-		reactors = new WorkerGroup(new JobQueue<Object>(), reactorClass, reactorCount);
+		reactors = new WorkerGroup<Object, JobQueue<Object>>(new JobQueue<Object>(), reactorClass, reactorCount);
 
 		Terminator term = Terminator.getInstance();
 		term.register(this);
