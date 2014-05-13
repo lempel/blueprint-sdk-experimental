@@ -49,6 +49,7 @@ public class AcidFileSystem extends GenericFileSystem {
 	// 2. Re-implement Transaction class according to this new policy.
 	// 3. To to '2', Must implement ProxyFile to link between original file and
 	// temporary file which is a to-be commited file.
+	// 4. To do '2' and '3', probably need to implement some TOC mechanism.
 	//
 	//
 	// - Keep track of un-committed or un-rollbacked changes.
