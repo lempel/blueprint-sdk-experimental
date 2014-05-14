@@ -23,7 +23,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.log4j.Logger;
 
-import blueprint.sdk.core.concurrent.lock.TimestampedMutex;
+import blueprint.sdk.core.concurrent.lock.timestamped.TimestampedLock;
 import blueprint.sdk.core.filesystem.FileSystem;
 import blueprint.sdk.core.filesystem.GenericFileSystem;
 import blueprint.sdk.util.Terminatable;
@@ -62,7 +62,7 @@ public class AcidFileSystem extends GenericFileSystem {
 	private static final Logger L = Logger.getLogger(AcidFileSystem.class);
 
 	/** Monitor Objects of currently open files (key: path, value: monitor) */
-	protected Map<String, TimestampedMutex> openFiles = new ConcurrentHashMap<String, TimestampedMutex>();
+	protected Map<String, TimestampedLock> openFiles = new ConcurrentHashMap<String, TimestampedLock>();
 	/** lock for openFiles */
 	protected ReentrantLock openFilesLock = new ReentrantLock();
 
@@ -104,7 +104,7 @@ public class AcidFileSystem extends GenericFileSystem {
 				try {
 					Set<String> keySet = openFiles.keySet();
 					for (String key : keySet) {
-						TimestampedMutex wrapper = openFiles.get(key);
+						TimestampedLock wrapper = openFiles.get(key);
 						// evict timed-out and unlocked mutex
 						if (wrapper.getTimestamp() <= limit && !wrapper.isLocked()) {
 							openFiles.remove(key);
@@ -130,18 +130,18 @@ public class AcidFileSystem extends GenericFileSystem {
 	 *            file path
 	 * @return existing lock or new lock
 	 */
-	protected TimestampedMutex getLock(String path) {
+	protected TimestampedLock getLock(String path) {
 		if (path == null) {
 			throw new NullPointerException("specified path is null");
 		}
 
-		TimestampedMutex result = null;
+		TimestampedLock result = null;
 
 		openFilesLock.lock();
 		try {
 			result = openFiles.get(path);
 			if (result == null) {
-				result = new TimestampedMutex();
+				result = new TimestampedLock(true);
 				openFiles.put(path, result);
 			}
 		} finally {
@@ -162,8 +162,8 @@ public class AcidFileSystem extends GenericFileSystem {
 		boolean result = false;
 
 		if (exists(path)) {
-			TimestampedMutex monitor = getLock(path);
-			monitor.lock(null);
+			TimestampedLock monitor = getLock(path);
+			monitor.lock();
 			try {
 				result = doDelete(path);
 			} finally {
@@ -194,8 +194,8 @@ public class AcidFileSystem extends GenericFileSystem {
 		boolean result = false;
 
 		if (!orgPath.equals(newPath)) {
-			TimestampedMutex orgMtx;
-			TimestampedMutex newMtx;
+			TimestampedLock orgMtx;
+			TimestampedLock newMtx;
 
 			openFilesLock.lock();
 			try {
@@ -205,8 +205,8 @@ public class AcidFileSystem extends GenericFileSystem {
 				openFilesLock.unlock();
 			}
 
-			newMtx.lock(null);
-			orgMtx.lock(null);
+			newMtx.lock();
+			orgMtx.lock();
 			try {
 				result = doRename(orgPath, newPath);
 			} finally {
@@ -240,8 +240,8 @@ public class AcidFileSystem extends GenericFileSystem {
 
 		byte[] result = null;
 
-		TimestampedMutex monitor = getLock(path);
-		monitor.lock(null);
+		TimestampedLock monitor = getLock(path);
+		monitor.lock();
 		try {
 			result = doRead(path);
 		} finally {
@@ -270,8 +270,8 @@ public class AcidFileSystem extends GenericFileSystem {
 			throw new NullPointerException("specified path is null");
 		}
 
-		TimestampedMutex monitor = getLock(path);
-		monitor.lock(null);
+		TimestampedLock monitor = getLock(path);
+		monitor.lock();
 		try {
 			doWrite(path, contents, append);
 		} catch (IOException e) {
@@ -322,9 +322,9 @@ public class AcidFileSystem extends GenericFileSystem {
 		AcidFileSystem filesystem;
 
 		/**
-		 * Map of {@link TimestampedMutex} owned this transaction
+		 * Map of {@link TimestampedLock} owned this transaction
 		 */
-		Map<String, TimestampedMutex> locks = new ConcurrentHashMap<String, TimestampedMutex>();
+		Map<String, TimestampedLock> locks = new ConcurrentHashMap<String, TimestampedLock>();
 
 		/** Update actions */
 		List<Action> actions = new ArrayList<Action>();
@@ -368,8 +368,8 @@ public class AcidFileSystem extends GenericFileSystem {
 			// FIXME of monitor is already locked by other transaction, waiting
 			// for acqusition may result in starvation.
 
-			TimestampedMutex lock = filesystem.getLock(path);
-			lock.lock(this);
+			TimestampedLock lock = filesystem.getLock(path);
+			lock.lock();
 
 			L.debug(Thread.currentThread().hashCode() + " lock acquired - " + path);
 
