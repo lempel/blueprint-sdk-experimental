@@ -356,6 +356,12 @@ public class AcidFileSystem extends GenericFileSystem {
 			rollback();
 		}
 
+		@Override
+		public void dispose() {
+			terminate();
+		}
+		
+
 		/**
 		 * reserve a write lock for specified path
 		 * 
@@ -535,6 +541,13 @@ public class AcidFileSystem extends GenericFileSystem {
 				actions.add(action);
 			}
 		}
+	}
+	
+	@Override
+	public void dispose() {
+		super.dispose();
+		
+		evictor.terminate();
 	}
 
 	/**
