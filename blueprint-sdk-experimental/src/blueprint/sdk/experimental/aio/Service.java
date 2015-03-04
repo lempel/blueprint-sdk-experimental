@@ -13,6 +13,12 @@
 
 package blueprint.sdk.experimental.aio;
 
+import blueprint.sdk.core.concurrent.TimeoutHandler;
+import blueprint.sdk.logger.Logger;
+import blueprint.sdk.util.Terminatable;
+import blueprint.sdk.util.Validator;
+import lempel.blueprint.base.io.IpFilter;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -20,12 +26,6 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-
-import lempel.blueprint.base.io.IpFilter;
-import blueprint.sdk.core.concurrent.TimeoutHandler;
-import blueprint.sdk.logger.Logger;
-import blueprint.sdk.util.Terminatable;
-import blueprint.sdk.util.Validator;
 
 /**
  * A Service<br>
@@ -37,145 +37,146 @@ import blueprint.sdk.util.Validator;
  * Service s1 = new Service("service 1", p1);<br>
  * s1.getIpFilter().allow("127.0.0.1");<br>
  * s1.bind("localhost", 1112, true, 5);<br>
- * 
+ *
  * @author Sangmin Lee
  * @since 2008. 11. 25.
  */
+@SuppressWarnings("WeakerAccess")
 public class Service implements Runnable, Terminatable {
-	private static final Logger LOGGER = Logger.getInstance();
+    private static final Logger LOGGER = Logger.getInstance();
 
-	private final String serviceName;
-	private transient final Proactor proactor;
+    private final String serviceName;
+    private transient final Proactor proactor;
+    private final IpFilter ipFilter;
+    private SocketAddress address;
+    private transient ServerSocketChannel serverChannel;
+    private transient TimeoutHandler timeoutHandler = null;
+    private boolean runFlag = true;
+    private boolean terminated = false;
 
-	private SocketAddress address;
-	private transient ServerSocketChannel serverChannel;
-	private transient TimeoutHandler timeoutHandler = null;
-	private final IpFilter ipFilter;
+    public Service(final String serviceName, final Proactor proactor) {
+        LOGGER.info(this, "creating service [" + serviceName + "]");
 
-	private transient boolean terminated = false;
+        this.serviceName = serviceName;
+        this.proactor = proactor;
+        ipFilter = new IpFilter();
 
-	public Service(final String serviceName, final Proactor proactor) {
-		LOGGER.info(this, "creating service [" + serviceName + "]");
+        LOGGER.info(this, "service [" + serviceName + "] created");
+    }
 
-		this.serviceName = serviceName;
-		this.proactor = proactor;
-		ipFilter = new IpFilter();
+    /**
+     * bind ServerSocketChannel & start service
+     *
+     * @param bindAddress address to bind
+     * @param bindPort port to bind
+     * @param reuseAddress true: reuse address
+     * @param clientTimeout connection timeout
+     * @throws IOException
+     */
+    @SuppressWarnings("SameParameterValue")
+    public void bind(final String bindAddress, final int bindPort, final boolean reuseAddress, final int clientTimeout)
+            throws IOException {
+        LOGGER.info(this, "binding service [" + serviceName + "] to [" + address + "]");
 
-		LOGGER.info(this, "service [" + serviceName + "] created");
-	}
+        if (clientTimeout > 0) {
+            timeoutHandler = TimeoutHandler.newTimeoutHandler(clientTimeout, 1);
+            proactor.setTimeoutHandler(timeoutHandler);
+        }
 
-	/**
-	 * bind ServerSocketChannel & start service
-	 * 
-	 * @param bindAddress
-	 * @param bindPort
-	 * @param reuseAddress
-	 * @param clientTimeout
-	 * @throws IOException
-	 */
-	public void bind(final String bindAddress, final int bindPort, final boolean reuseAddress, final int clientTimeout)
-			throws IOException {
-		LOGGER.info(this, "binding service [" + serviceName + "] to [" + address + "]");
+        if (Validator.isNotEmpty(bindAddress) || "*".equals(bindAddress)) {
+            address = new InetSocketAddress(bindPort);
+        } else {
+            address = new InetSocketAddress(InetAddress.getByName(bindAddress), bindPort);
+        }
 
-		if (clientTimeout > 0) {
-			timeoutHandler = TimeoutHandler.newTimeoutHandler(clientTimeout, 1);
-			proactor.setTimeoutHandler(timeoutHandler);
-		}
+        // blocking mode
+        serverChannel = ServerSocketChannel.open();
+        serverChannel.configureBlocking(true);
+        serverChannel.socket().setReuseAddress(reuseAddress);
+        serverChannel.socket().bind(address);
 
-		if (Validator.isNotEmpty(bindAddress) || "*".equals(bindAddress)) {
-			address = new InetSocketAddress(bindPort);
-		} else {
-			address = new InetSocketAddress(InetAddress.getByName(bindAddress), bindPort);
-		}
+        Thread thr = new Thread(this);
+        thr.setDaemon(true);
+        thr.start();
 
-		// blocking mode
-		serverChannel = ServerSocketChannel.open();
-		serverChannel.configureBlocking(true);
-		serverChannel.socket().setReuseAddress(reuseAddress);
-		serverChannel.socket().bind(address);
+        LOGGER.info(this, "service [" + serviceName + "] is now bound to [" + address + "] and started");
+    }
 
-		Thread thr = new Thread(this);
-		thr.setDaemon(true);
-		thr.start();
+    /**
+     * Accept a client
+     *
+     * @param channel channel to accept
+     */
+    public void accept(final SocketChannel channel) {
+        proactor.accept(channel);
+    }
 
-		LOGGER.info(this, "service [" + serviceName + "] is now bound to [" + address + "] and started");
-	}
+    public void run() {
+        LOGGER.info(this, "service [" + serviceName + "] started");
 
-	/**
-	 * Accept a client
-	 * 
-	 * @param channel
-	 */
-	public void accept(final SocketChannel channel) {
-		proactor.accept(channel);
-	}
+        while (runFlag) {
+            try {
+                // blocking mode
+                Socket sock = serverChannel.socket().accept();
+                if (sock != null) {
+                    if (ipFilter.isAllowed(sock.getInetAddress().getHostAddress())) {
+                        accept(sock.getChannel());
+                    } else {
+                        try {
+                            sock.close();
+                        } catch (Exception ignored) {
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                LOGGER.error("can't accept client - " + e);
+                LOGGER.trace(e);
+            }
+        }
 
-	public void run() {
-		boolean runFlag = true;
+        terminated = true;
+    }
 
-		LOGGER.info(this, "service [" + serviceName + "] started");
+    public boolean isValid() {
+        boolean result = false;
+        if (serverChannel.isOpen() && proactor.isValid()) {
+            result = true;
+        }
+        return result;
+    }
 
-		while (runFlag) {
-			try {
-				// blocking mode
-				Socket sock = serverChannel.socket().accept();
-				if (sock != null) {
-					if (ipFilter.isAllowed(sock.getInetAddress().getHostAddress())) {
-						accept(sock.getChannel());
-					} else {
-						try {
-							sock.close();
-						} catch (Exception ignored) {
-						}
-					}
-				}
-			} catch (IOException e) {
-				LOGGER.error("can't accept client - " + e);
-				LOGGER.trace(e);
-			}
-		}
+    public boolean isTerminated() {
+        return terminated;
+    }
 
-		terminated = true;
-	}
+    public void terminate() {
+        LOGGER.info(this, "terminating service [" + serviceName + "]");
 
-	public boolean isValid() {
-		boolean result = false;
-		if (serverChannel.isOpen() && proactor.isValid()) {
-			result = true;
-		}
-		return result;
-	}
+        try {
+            serverChannel.close();
+        } catch (IOException ignored) {
+        }
+        proactor.terminate();
+        timeoutHandler.terminate();
 
-	public boolean isTerminated() {
-		return terminated;
-	}
+        runFlag = false;
 
-	public void terminate() {
-		LOGGER.info(this, "terminating service [" + serviceName + "]");
+        LOGGER.info(this, "service [" + serviceName + "] is terminated");
+    }
 
-		try {
-			serverChannel.close();
-		} catch (IOException ignored) {
-		}
-		proactor.terminate();
-		timeoutHandler.terminate();
+    public String getServiceName() {
+        return serviceName;
+    }
 
-		LOGGER.info(this, "service [" + serviceName + "] is terminated");
-	}
+    public ServerSocketChannel getServerChannel() {
+        return serverChannel;
+    }
 
-	public String getServiceName() {
-		return serviceName;
-	}
+    public Proactor getProactor() {
+        return proactor;
+    }
 
-	public ServerSocketChannel getServerChannel() {
-		return serverChannel;
-	}
-
-	public Proactor getProactor() {
-		return proactor;
-	}
-
-	public IpFilter getIpFilter() {
-		return ipFilter;
-	}
+    public IpFilter getIpFilter() {
+        return ipFilter;
+    }
 }

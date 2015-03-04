@@ -1,156 +1,131 @@
 package blueprint.sdk.experimental.filesystem.transactional;
 
-import java.io.IOException;
-
 import org.apache.log4j.Logger;
+
+import java.io.IOException;
 
 public class AcidFileSystemTest extends AcidFileSystem {
 
-	private static final Logger L = Logger.getLogger(AcidFileSystemTest.class);
+    private static final Logger L = Logger.getLogger(AcidFileSystemTest.class);
 
-	static boolean verbose = true;
+    @SuppressWarnings("FieldCanBeLocal")
+    private static final boolean verbose = true;
 
-	private static final int NUM_THREADS = 10;
+    private static final int NUM_THREADS = 10;
 
-	private static final int WORK_DURATION = 60 * 1000;
-	private static final int IDLE_DURATION = 10 * 1000;
+    private static final int WORK_DURATION = 60 * 1000;
+    private static final int IDLE_DURATION = 10 * 1000;
 
-	public AcidFileSystemTest() {
-		super();
-	}
+    private AcidFileSystemTest() {
+        super();
+    }
 
-	@Override
-	public boolean deleteFile(String path) {
-		boolean result = super.deleteFile(path);
-		return result;
-	}
+    public static void main(String[] args) {
+        new AcidFileSystemTest().test();
+    }
 
-	/** boom! */
-	@Override
-	public boolean renameFile(String orgPath, String newPath) {
-		boolean result = super.renameFile(orgPath, newPath);
-		return result;
-	}
+    void test() {
+        TestThread[] threads = new TestThread[NUM_THREADS];
 
-	@Override
-	public byte[] readFile(String path) throws IOException {
-		byte[] result = super.readFile(path);
-		return result;
-	}
+        for (int i = 0; i < threads.length; i++) {
+            threads[i] = new TestThread(i, this, WORK_DURATION, IDLE_DURATION);
+        }
 
-	@Override
-	public void writeToFile(String path, byte[] contents, boolean append) throws IOException {
-		super.writeToFile(path, contents, append);
-	}
+        for (int i = 0; i < threads.length; i++) {
+            threads[i].start();
+        }
+    }
 
-	public void test() {
-		TestThread[] threads = new TestThread[NUM_THREADS];
+    class TestThread extends Thread {
+        private static final String PATH1 = "e:\\10mb.txt";
+        private static final String PATH2 = "e:\\10mb.org.txt";
+        final AcidFileSystemTest fs;
+        final long work;
+        final long idle;
+        private final byte[] contents_10mb;
 
-		for (int i = 0; i < threads.length; i++) {
-			threads[i] = new TestThread(i, this, WORK_DURATION, IDLE_DURATION);
-		}
+        @SuppressWarnings("SameParameterValue")
+        public TestThread(int id, AcidFileSystemTest fs, long work, long idle) {
+            this.fs = fs;
+            this.work = work;
+            this.idle = idle;
 
-		for (int i = 0; i < threads.length; i++) {
-			threads[i].start();
-		}
-	}
+            setName(Integer.toString(id));
+            byte[] proto = Integer.toString(id).getBytes();
+            contents_10mb = new byte[10 * 1024 * 1024];
+            for (int i = 0; i < contents_10mb.length; i += proto.length) {
+                if (i + proto.length < contents_10mb.length) {
+                    System.arraycopy(proto, 0, contents_10mb, i, proto.length);
+                } else {
+                    System.arraycopy(proto, 0, contents_10mb, i, contents_10mb.length - i);
+                }
 
-	public static void main(String[] args) {
-		new AcidFileSystemTest().test();
-	}
+                contents_10mb[i] = proto[0];
+            }
+        }
 
-	class TestThread extends Thread {
-		private static final String PATH1 = "e:\\10mb.txt";
-		private static final String PATH2 = "e:\\10mb.org.txt";
+        public void run() {
+            long start = System.currentTimeMillis();
 
-		private byte[] contents_10mb;
+            while (true) {
+                long now = System.currentTimeMillis();
 
-		AcidFileSystemTest fs;
+                if (now >= start + work) {
+                    L.debug(hashCode() + " now waiting");
 
-		long work;
-		long idle;
+                    try {
+                        sleep(idle);
+                    } catch (InterruptedException ignored) {
+                    }
 
-		public TestThread(int id, AcidFileSystemTest fs, long work, long idle) {
-			this.fs = fs;
-			this.work = work;
-			this.idle = idle;
+                    L.debug(hashCode() + " now working");
 
-			setName(Integer.toString(id));
-			byte[] proto = Integer.toString(id).getBytes();
-			contents_10mb = new byte[10 * 1024 * 1024];
-			for (int i = 0; i < contents_10mb.length; i += proto.length) {
-				if (i + proto.length < contents_10mb.length) {
-					System.arraycopy(proto, 0, contents_10mb, i, proto.length);
-				} else {
-					System.arraycopy(proto, 0, contents_10mb, i, contents_10mb.length - i);
-				}
+                    start = System.currentTimeMillis();
+                }
 
-				contents_10mb[i] = proto[0];
-			}
-		}
+                Transaction tr = fs.newTransaction();
 
-		public void run() {
-			long start = System.currentTimeMillis();
+                try {
+                    if (verbose)
+                        L.debug(hashCode() + " write 10mb");
+                    tr.writeToFile(PATH1, contents_10mb, false);
+                    if (verbose)
+                        L.debug(hashCode() + " write 10mb - ok");
 
-			while (true) {
-				long now = System.currentTimeMillis();
+                    if (verbose)
+                        L.debug(hashCode() + " delete 10mb.org");
+                    tr.deleteFile(PATH2);
+                    if (verbose)
+                        L.debug(hashCode() + " delete 10mb.org - ok");
 
-				if (now >= start + work) {
-					L.debug(hashCode() + " now waiting");
+                    if (verbose)
+                        L.debug(hashCode() + " rename 10mb > 10mb.org");
+                    tr.renameFile(PATH1, PATH2);
+                    if (verbose)
+                        L.debug(hashCode() + " rename 10mb > 10mb.org - ok");
 
-					try {
-						sleep(idle);
-					} catch (InterruptedException ignored) {
-					}
+                    if (verbose)
+                        L.debug(hashCode() + " read 10mb.org");
+                    byte[] data = tr.readFile(PATH2);
+                    if (verbose)
+                        L.debug(hashCode() + " read 10mb.org - ok");
 
-					L.debug(hashCode() + " now working");
+                    if (data == null) {
+                        throw new NullPointerException("null file");
+                    }
+                    if (data.length != contents_10mb.length) {
+                        throw new IOException("mismatched read size. data.length=" + data.length);
+                    }
 
-					start = System.currentTimeMillis();
-				}
+                    tr.commit();
+                } catch (IOException e) {
+                    L.debug(hashCode() + " - " + e, e);
 
-				Transaction tr = fs.newTransaction();
+                    tr.rollback();
 
-				try {
-					if (verbose)
-						L.debug(hashCode() + " write 10mb");
-					tr.writeToFile(PATH1, contents_10mb, false);
-					if (verbose)
-						L.debug(hashCode() + " write 10mb - ok");
-
-					if (verbose)
-						L.debug(hashCode() + " delte 10mb.org");
-					tr.deleteFile(PATH2);
-					if (verbose)
-						L.debug(hashCode() + " delte 10mb.org - ok");
-
-					if (verbose)
-						L.debug(hashCode() + " rename 10mb > 10mb.org");
-					tr.renameFile(PATH1, PATH2);
-					if (verbose)
-						L.debug(hashCode() + " rename 10mb > 10mb.org - ok");
-
-					if (verbose)
-						L.debug(hashCode() + " read 10mb.org");
-					byte[] data = tr.readFile(PATH2);
-					if (verbose)
-						L.debug(hashCode() + " read 10mb.org - ok");
-
-					if (data == null) {
-						throw new NullPointerException("null file");
-					}
-					if (data.length != contents_10mb.length) {
-						throw new IOException("mismatched read size. data.length=" + data.length);
-					}
-
-					tr.commit();
-				} catch (IOException e) {
-					L.debug(hashCode() + " - " + e, e);
-
-					tr.rollback();
-
-					System.exit(100);
-				}
-			}
-		}
-	}
+                    System.exit(100);
+                }
+            }
+        }
+    }
 }

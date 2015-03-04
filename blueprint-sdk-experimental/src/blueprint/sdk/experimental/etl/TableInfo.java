@@ -16,45 +16,45 @@ package blueprint.sdk.experimental.etl;
 
 /**
  * Table info
- * 
+ *
  * @author Sangmin Lee
  * @since 2009. 9. 7.
  */
 public class TableInfo {
-	private String schemaName;
-	private String tableName;
-	private ColumnInfo[] columns;
-	private String[] keys;
+    private String schemaName;
+    private String tableName;
+    private ColumnInfo[] columns;
+    private String[] keys;
 
-	public void setSchemaName(String schemaName) {
-		this.schemaName = schemaName;
-	}
+    public String getSchemaName() {
+        return schemaName;
+    }
 
-	public void setTableName(String tableName) {
-		this.tableName = tableName;
-	}
+    public void setSchemaName(String schemaName) {
+        this.schemaName = schemaName;
+    }
 
-	public String getSchemaName() {
-		return schemaName;
-	}
+    public String getTableName() {
+        return tableName;
+    }
 
-	public String getTableName() {
-		return tableName;
-	}
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
 
-	public ColumnInfo[] getColumns() {
-		return columns;
-	}
+    public ColumnInfo[] getColumns() {
+        return columns;
+    }
 
-	public void setColumns(final ColumnInfo[] columns) {
-		this.columns = columns;
-	}
+    public void setColumns(final ColumnInfo[] columns) {
+        this.columns = columns;
+    }
 
-	public String[] getKeys() {
-		return keys;
-	}
+    public String[] getKeys() {
+        return keys;
+    }
 
-	public void setKeys(final String[] keys) {
-		this.keys = keys;
-	}
+    public void setKeys(final String[] keys) {
+        this.keys = keys;
+    }
 }

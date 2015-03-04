@@ -13,34 +13,34 @@
 
 package blueprint.sdk.experimental.aio.session;
 
+import blueprint.sdk.experimental.aio.SelectorLoadBalancer;
+import blueprint.sdk.experimental.aio.protocol.EchoProtocol;
+
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.ConcurrentHashMap;
 
-import blueprint.sdk.experimental.aio.SelectorLoadBalancer;
-import blueprint.sdk.experimental.aio.protocol.EchoProtocol;
-
 
 /**
  * Echo Session
- * 
+ *
  * @author Sangmin Lee
  * @since 2008. 12. 1.
  */
 public class EchoSession extends Session {
-	public EchoSession(final SocketChannel channel, final ConcurrentHashMap<Integer, Session> map,
-			final Integer bufferSize, final SelectorLoadBalancer selectorLB) throws IOException {
-		super(channel, map, bufferSize, selectorLB);
+    public EchoSession(final SocketChannel channel, final ConcurrentHashMap<Integer, Session> map,
+                       final Integer bufferSize, final SelectorLoadBalancer selectorLB) {
+        super(channel, map, bufferSize, selectorLB);
 
-		protocol = new EchoProtocol(wrapper, selectorLB);
-	}
+        protocol = new EchoProtocol(wrapper, selectorLB);
+    }
 
-	public void process() throws IOException {
-		// read
-		byte[] request = protocol.read(readBuffer);
+    public void process() throws IOException {
+        // read
+        byte[] request = protocol.read(readBuffer);
 
-		// write
-		// don't have call protocol.write but not prohibited.
-		write(request);
-	}
+        // write
+        // don't have call protocol.write but not prohibited.
+        write(request);
+    }
 }

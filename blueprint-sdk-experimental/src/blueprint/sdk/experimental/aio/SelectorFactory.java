@@ -13,6 +13,8 @@
 
 package blueprint.sdk.experimental.aio;
 
+import blueprint.sdk.util.Validator;
+
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -20,49 +22,47 @@ import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import blueprint.sdk.util.Validator;
-
 
 /**
  * Selector Factory to recycle Selectors<br>
  * Opening a Selector cost a lot. So recycle as many as possible.<br>
- * 
+ *
  * @author Sangmin Lee
  * @since 2008. 12. 5.
  */
+@SuppressWarnings("WeakerAccess")
 public class SelectorFactory {
-	private transient static LinkedList<Selector> pool = new LinkedList<Selector>();
+    private final transient static LinkedList<Selector> pool = new LinkedList<>();
 
-	/**
-	 * @return
-	 * @throws IOException
-	 *             thrown by Selector
-	 */
-	public static Selector get() throws IOException {
-		Selector result;
-		try {
-			result = pool.removeFirst();
-		} catch (NoSuchElementException e) {
-			result = Selector.open();
-		}
+    /**
+     * @return available selector
+     * @throws IOException thrown by Selector
+     */
+    public static Selector get() throws IOException {
+        Selector result;
+        try {
+            result = pool.removeFirst();
+        } catch (NoSuchElementException e) {
+            result = Selector.open();
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	public static void release(final Selector selector) {
-		if (Validator.isValid(selector)) {
-			Set<SelectionKey> keys = selector.keys();
+    public static void release(final Selector selector) {
+        if (Validator.isValid(selector)) {
+            Set<SelectionKey> keys = selector.keys();
 
-			for (SelectionKey key : keys) {
-				key.cancel();
-				keys.remove(key);
-			}
+            for (SelectionKey key : keys) {
+                key.cancel();
+                keys.remove(key);
+            }
 
-			pool.addFirst(selector);
-		}
-	}
+            pool.addFirst(selector);
+        }
+    }
 
-	public static int size() {
-		return pool.size();
-	}
+    public static int size() {
+        return pool.size();
+    }
 }

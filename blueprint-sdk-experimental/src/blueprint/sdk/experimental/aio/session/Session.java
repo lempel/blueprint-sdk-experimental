@@ -13,16 +13,16 @@
 
 package blueprint.sdk.experimental.aio.session;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
-import java.util.concurrent.ConcurrentHashMap;
-
 import blueprint.sdk.experimental.aio.SelectorLoadBalancer;
 import blueprint.sdk.experimental.aio.SocketChannelWrapper;
 import blueprint.sdk.experimental.aio.protocol.Protocol;
 import blueprint.sdk.util.Terminatable;
 import blueprint.sdk.util.Validator;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Provides basic functions and guidelines for client session implementation.<br>
@@ -34,92 +34,100 @@ import blueprint.sdk.util.Validator;
  * current session.<br>
  * If you are willing to override terminate() method, make sure to call
  * 'map.remove(this)'.<br>
- * 
+ *
  * @author Sangmin Lee
  * @since 2008. 11. 27.
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class Session implements Terminatable {
-	protected final transient SocketChannelWrapper wrapper;
-	protected final ConcurrentHashMap<Integer, Session> sessionMap;
-	protected final transient SelectorLoadBalancer readSelectorLB;
+    @SuppressWarnings("WeakerAccess")
+    protected final transient SocketChannelWrapper wrapper;
+    @SuppressWarnings("WeakerAccess")
+    protected final ConcurrentHashMap<Integer, Session> sessionMap;
+    @SuppressWarnings("WeakerAccess")
+    protected final transient SelectorLoadBalancer readSelectorLB;
 
-	protected Protocol protocol;
-	protected ByteBuffer readBuffer;
+    @SuppressWarnings("WeakerAccess")
+    protected Protocol protocol;
+    @SuppressWarnings("WeakerAccess")
+    protected ByteBuffer readBuffer;
 
-	private transient boolean terminated = false;
+    private transient boolean terminated = false;
 
-	/**
-	 * Constructor
-	 * 
-	 * @param channel
-	 * @param sessionMap
-	 *            Map of sessions
-	 * @param readBufferSize
-	 *            read buffer size in byte
-	 * @param readSelectorLB
-	 *            SelectorLoadBalancer for OP_READ ops
-	 * @throws IOException
-	 *             Can't create SocketChannelWrapper
-	 */
-	public Session(final SocketChannel channel, final ConcurrentHashMap<Integer, Session> sessionMap,
-			final Integer readBufferSize, final SelectorLoadBalancer readSelectorLB) throws IOException {
-		wrapper = new SocketChannelWrapper(channel);
-		this.sessionMap = sessionMap;
+    /**
+     * Constructor
+     *
+     * @param channel channel to use
+     * @param sessionMap     Map of sessions
+     * @param readBufferSize read buffer size in byte
+     * @param readSelectorLB SelectorLoadBalancer for OP_READ ops
+     */
+    @SuppressWarnings("WeakerAccess")
+    public Session(final SocketChannel channel, final ConcurrentHashMap<Integer, Session> sessionMap,
+                   final Integer readBufferSize, final SelectorLoadBalancer readSelectorLB) {
+        wrapper = new SocketChannelWrapper(channel);
+        this.sessionMap = sessionMap;
 
-		readBuffer = ByteBuffer.allocate(readBufferSize);
-		this.readSelectorLB = readSelectorLB;
-	}
+        readBuffer = ByteBuffer.allocate(readBufferSize);
+        this.readSelectorLB = readSelectorLB;
+    }
 
-	public boolean isValid() {
-		return wrapper.isValid();
-	}
+    public boolean isValid() {
+        return wrapper.isValid();
+    }
 
-	public boolean isTerminated() {
-		return terminated;
-	}
+    public boolean isTerminated() {
+        return terminated;
+    }
 
-	public void terminate() {
-		if (Validator.isNotNull(wrapper)) {
-			wrapper.terminate();
-		}
+    @SuppressWarnings("SuspiciousMethodCalls")
+    public void terminate() {
+        if (Validator.isNotNull(wrapper)) {
+            wrapper.terminate();
+        }
 
-		if (Validator.isNotNull(sessionMap)) {
-			sessionMap.remove(this);
-		}
+        if (Validator.isNotNull(sessionMap)) {
+            try {
+                sessionMap.remove(this);
+            } catch (Exception ignored) {
+            }
+        }
 
-		if (Validator.isNotNull(readBuffer)) {
-			readBuffer.clear();
-			readBuffer = null;
-		}
+        if (Validator.isNotNull(readBuffer)) {
+            readBuffer.clear();
+            readBuffer = null;
+        }
 
-		terminated = true;
-	}
+        terminated = true;
+    }
 
-	/**
-	 * Process a client<br>
-	 * <b>BEWARE: client could be timed-out already</b><br>
-	 * 
-	 * @throws IOException
-	 */
-	public abstract void process() throws IOException;
+    /**
+     * Process a client<br>
+     * <b>BEWARE: client could be timed-out already</b><br>
+     *
+     * @throws IOException
+     */
+    public abstract void process() throws IOException;
 
-	public byte[] read(final ByteBuffer buffer) throws IOException {
-		return protocol.read(buffer);
-	}
+    @SuppressWarnings("WeakerAccess")
+    public byte[] read(final ByteBuffer buffer) throws IOException {
+        return protocol.read(buffer);
+    }
 
-	public void write(byte[] data) throws IOException {
-		protocol.write(ByteBuffer.wrap(data));
-	}
+    @SuppressWarnings("WeakerAccess")
+    public void write(byte[] data) throws IOException {
+        protocol.write(ByteBuffer.wrap(data));
+    }
 
-	public SocketChannelWrapper getWrapper() {
-		return wrapper;
-	}
+    public SocketChannelWrapper getWrapper() {
+        return wrapper;
+    }
 
-	public ConcurrentHashMap<Integer, Session> getSessionMap() {
-		return sessionMap;
-	}
+    public ConcurrentHashMap<Integer, Session> getSessionMap() {
+        return sessionMap;
+    }
 
-	public ByteBuffer getReadBuffer() {
-		return readBuffer;
-	}
+    public ByteBuffer getReadBuffer() {
+        return readBuffer;
+    }
 }

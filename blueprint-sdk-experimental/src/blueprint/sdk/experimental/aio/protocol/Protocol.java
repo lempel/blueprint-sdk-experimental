@@ -13,12 +13,11 @@
 
 package blueprint.sdk.experimental.aio.protocol;
 
-import java.io.EOFException;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-
 import blueprint.sdk.experimental.aio.SelectorLoadBalancer;
 import blueprint.sdk.experimental.aio.SocketChannelWrapper;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
 
 /**
@@ -27,52 +26,58 @@ import blueprint.sdk.experimental.aio.SocketChannelWrapper;
  * Guide line:<br>
  * Use readSelectorLB.register(SocketChannelWrapper, int) for read operation.<br>
  * Check wrapper.isValid() before every read/write operations.<br>
- * 
+ *
  * @author Sangmin Lee
  * @since 2008. 12. 12.
  */
 public abstract class Protocol {
-	protected transient SocketChannelWrapper wrapper;
-	protected transient SelectorLoadBalancer readSelectorLB;
+    @SuppressWarnings("WeakerAccess")
+    protected transient SocketChannelWrapper wrapper;
+    @SuppressWarnings("WeakerAccess")
+    protected transient SelectorLoadBalancer readSelectorLB;
 
-	/**
-	 * Constructor
-	 * 
-	 * @param wrapper
-	 * @param readSelectorLB
-	 *            SelectorLoadBalancer for OP_READ
-	 */
-	public Protocol(final SocketChannelWrapper wrapper, final SelectorLoadBalancer readSelectorLB) {
-		this.wrapper = wrapper;
-		this.readSelectorLB = readSelectorLB;
-	}
+    /**
+     * Constructor
+     *
+     * @param wrapper channel wrapper to use
+     * @param readSelectorLB SelectorLoadBalancer for OP_READ
+     */
+    @SuppressWarnings("WeakerAccess")
+    public Protocol(final SocketChannelWrapper wrapper, final SelectorLoadBalancer readSelectorLB) {
+        this.wrapper = wrapper;
+        this.readSelectorLB = readSelectorLB;
+    }
 
-	/**
-	 * returns received byte[] only if read operation is successful.
-	 * 
-	 * @param buffer
-	 * @return null or received byte[]
-	 * @throws IOException
-	 * @throws EOFException
-	 *             nothing but EOF is received
-	 */
-	public abstract byte[] read(final ByteBuffer buffer) throws IOException, EOFException;
+    /**
+     * returns received byte[] only if read operation is successful.
+     *
+     * @param buffer buffer to use
+     * @return null or received byte[]
+     * @throws java.io.IOException
+     */
+    public abstract byte[] read(final ByteBuffer buffer) throws IOException;
 
-	public abstract void write(final ByteBuffer buffer) throws IOException;
+    /**
+     * send data
+     *
+     * @param buffer data to send
+     * @throws java.io.IOException
+     */
+    public abstract void write(final ByteBuffer buffer) throws IOException;
 
-	protected SocketChannelWrapper getWrapper() {
-		return wrapper;
-	}
+    protected SocketChannelWrapper getWrapper() {
+        return wrapper;
+    }
 
-	protected void setWrapper(final SocketChannelWrapper wrapper) {
-		this.wrapper = wrapper;
-	}
+    protected void setWrapper(final SocketChannelWrapper wrapper) {
+        this.wrapper = wrapper;
+    }
 
-	protected SelectorLoadBalancer getReadSelectorLB() {
-		return readSelectorLB;
-	}
+    protected SelectorLoadBalancer getReadSelectorLB() {
+        return readSelectorLB;
+    }
 
-	protected void setReadSelectorLB(final SelectorLoadBalancer readSelectorLB) {
-		this.readSelectorLB = readSelectorLB;
-	}
+    protected void setReadSelectorLB(final SelectorLoadBalancer readSelectorLB) {
+        this.readSelectorLB = readSelectorLB;
+    }
 }

@@ -17,139 +17,139 @@ import java.sql.Types;
 
 /**
  * Table column info
- * 
+ *
  * @author Sangmin Lee
  * @since 2009. 9. 7.
  */
 public class ColumnInfo {
-	private int index = -1;
-	private String name = null;
-	private int type = -1;
-	private int length = -1;
-	private int digits = -1;
-	private int radix = 10;
-	private boolean nullable = true;
+    private int index = -1;
+    private String name = null;
+    private int type = -1;
+    private int length = -1;
+    private int digits = -1;
+    private int radix = 10;
+    private boolean nullable = true;
 
-	public int getIndex() {
-		return index;
-	}
+    /**
+     * returns actual type name (for DDL)
+     *
+     * @param databaseType {@link blueprint.sdk.experimental.etl.DatabaseType}
+     * @param type column's type
+     * @return type name
+     */
+    public static String getTypeName(int databaseType, int type) {
+        String result = "unknown";
 
-	public void setIndex(int index) {
-		this.index = index;
-	}
+        // TODO expand type support
+        switch (type) {
+            case Types.BIGINT:
+                result = "BIGINT";
+                break;
+            case Types.BINARY:
+                result = "BINARY";
+                break;
+            case Types.BOOLEAN:
+                result = "BOOLEAN";
+                break;
+            case Types.CHAR:
+                result = "CHARACTER";
+                break;
+            case Types.CLOB:
+                result = "CLOB";
+                break;
+            case Types.DATE:
+                result = "DATE";
+                break;
+            case Types.DECIMAL:
+                result = "DECIMAL";
+                break;
+            case Types.DOUBLE:
+                result = "DOUBLE";
+                break;
+            case Types.FLOAT:
+                result = "FLOAT";
+                break;
+            case Types.INTEGER:
+                switch (databaseType) {
+                    case DatabaseType.DB2:
+                        result = "INTEGER";
+                        break;
+                    case DatabaseType.MSSQL:
+                    default:
+                        result = "INT";
+                        break;
+                }
+                break;
+            case Types.NUMERIC:
+                result = "NUMERIC";
+                break;
+            case Types.TIME:
+                result = "TIME";
+                break;
+            case Types.TIMESTAMP:
+                result = "TIMESTAMP";
+                break;
+            case Types.VARCHAR:
+                result = "VARCHAR";
+                break;
+        }
 
-	public String getName() {
-		return name;
-	}
+        return result;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public int getIndex() {
+        return index;
+    }
 
-	public int getType() {
-		return type;
-	}
+    public void setIndex(int index) {
+        this.index = index;
+    }
 
-	public void setType(int type) {
-		this.type = type;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public int getLength() {
-		return length;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setLength(int length) {
-		this.length = length;
-	}
+    public int getType() {
+        return type;
+    }
 
-	public int getDigits() {
-		return digits;
-	}
+    public void setType(int type) {
+        this.type = type;
+    }
 
-	public void setDigits(int digits) {
-		this.digits = digits;
-	}
+    public int getLength() {
+        return length;
+    }
 
-	public int getRadix() {
-		return radix;
-	}
+    public void setLength(int length) {
+        this.length = length;
+    }
 
-	public void setRadix(int radix) {
-		this.radix = radix;
-	}
+    public int getDigits() {
+        return digits;
+    }
 
-	public boolean isNullable() {
-		return nullable;
-	}
+    public void setDigits(int digits) {
+        this.digits = digits;
+    }
 
-	public void setNullable(boolean nullable) {
-		this.nullable = nullable;
-	}
+    public int getRadix() {
+        return radix;
+    }
 
-	/**
-	 * returns actual type name (for DDL)
-	 * 
-	 * @param databaseType
-	 * @param type
-	 * @return
-	 */
-	public static String getTypeName(int databaseType, int type) {
-		String result = "unknown";
+    public void setRadix(int radix) {
+        this.radix = radix;
+    }
 
-		// TODO expand type support
-		switch (type) {
-		case Types.BIGINT:
-			result = "BIGINT";
-			break;
-		case Types.BINARY:
-			result = "BINARY";
-			break;
-		case Types.BOOLEAN:
-			result = "BOOLEAN";
-			break;
-		case Types.CHAR:
-			result = "CHARACTER";
-			break;
-		case Types.CLOB:
-			result = "CLOB";
-			break;
-		case Types.DATE:
-			result = "DATE";
-			break;
-		case Types.DECIMAL:
-			result = "DECIMAL";
-			break;
-		case Types.DOUBLE:
-			result = "DOUBLE";
-			break;
-		case Types.FLOAT:
-			result = "FLOAT";
-			break;
-		case Types.INTEGER:
-			switch (databaseType) {
-			case DatabaseType.DB2:
-				result = "INTEGER";
-				break;
-			case DatabaseType.MSSQL:
-			default:
-				result = "INT";
-				break;
-			}
-			break;
-		case Types.NUMERIC:
-			result = "NUMERIC";
-			break;
-		case Types.TIME:
-			result = "TIME";
-			break;
-		case Types.TIMESTAMP:
-			result = "TIMESTAMP";
-			break;
-		case Types.VARCHAR:
-			result = "VARCHAR";
-			break;
-		}
+    public boolean isNullable() {
+        return nullable;
+    }
 
-		return result;
-	}
+    public void setNullable(boolean nullable) {
+        this.nullable = nullable;
+    }
 }

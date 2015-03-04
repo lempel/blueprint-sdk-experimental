@@ -19,43 +19,43 @@ about 'Connection.close()'.
 <br>
 <br>
 <br>
-To faciliate florist.db features:
+To facilitate florist.db features:
 <br>
 <br>
-First, add 'ConnectionListener' and 'ConnectinFilter' to 'web.xml'.
+First, add 'ConnectionListener' and 'ConnectionFilter' to 'web.xml'.
 <br>
 Second, write some properties files and place them into your CLASSPATH.
 <br>
 <br>
 <li>jdbc_pools.properties - list of properties files<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;#<br>
-&nbsp;&nbsp;&nbsp;&nbsp;# list JDBC configurations files here.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;#<br>
-&nbsp;&nbsp;&nbsp;&nbsp;# ex)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;# PROP_LIST = /oracle.properties
-/mysql.properties /postgres.properties<br>
-&nbsp;&nbsp;&nbsp;&nbsp;# or<br>
-&nbsp;&nbsp;&nbsp;&nbsp;# PROP_LIST = /oracle.properties \<br>
-&nbsp;&nbsp;&nbsp;&nbsp;# /oracle.properties \<br>
-&nbsp;&nbsp;&nbsp;&nbsp;# /postgres.properties<br>
-&nbsp;&nbsp;&nbsp;&nbsp;#<br>
-&nbsp;&nbsp;&nbsp;&nbsp;PROP_LIST = /oracle.properties /mysql.properties
-/postgres.properties<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;#<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;# list JDBC configurations files here.<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;#<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;# ex)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;# PROP_LIST = /oracle.properties
+    /mysql.properties /postgres.properties<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;# or<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;# PROP_LIST = /oracle.properties \<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;# /oracle.properties \<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;# /postgres.properties<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;#<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;PROP_LIST = /oracle.properties /mysql.properties
+    /postgres.properties<br>
 </li>
 <br>
 <li>[any id].properties - 1:1 definition for JDBC connection pool<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;POOL_NAME = XXXX_DB<br>
-&nbsp;&nbsp;&nbsp;&nbsp;CLASS_NAME = oracle.jdbc.OracleDriver<br>
-&nbsp;&nbsp;&nbsp;&nbsp;URL = jdbc:oracle:thin:@127.0.0.1:1521:INT1<br>
-&nbsp;&nbsp;&nbsp;&nbsp;USER = scott<br>
-&nbsp;&nbsp;&nbsp;&nbsp;PASSWORD = tiger<br>
-&nbsp;&nbsp;&nbsp;&nbsp;MAX_ACTIVE = 5<br>
-&nbsp;&nbsp;&nbsp;&nbsp;MAX_IDLE = 1<br>
-&nbsp;&nbsp;&nbsp;&nbsp;MAX_WAIT = 200<br>
-&nbsp;&nbsp;&nbsp;&nbsp;INITIAL = 1<br>
-&nbsp;&nbsp;&nbsp;&nbsp;VALIDATION = select sysdate from dual<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;POOL_NAME = XXXX_DB<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;CLASS_NAME = oracle.jdbc.OracleDriver<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;URL = jdbc:oracle:thin:@127.0.0.1:1521:INT1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;USER = scott<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;PASSWORD = tiger<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;MAX_ACTIVE = 5<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;MAX_IDLE = 1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;MAX_WAIT = 200<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;INITIAL = 1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;VALIDATION = select sysdate from dual<br>
 </li>
 <br>
 Now, ready to go.

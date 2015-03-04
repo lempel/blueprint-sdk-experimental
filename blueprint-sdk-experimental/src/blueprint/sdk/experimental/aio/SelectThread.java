@@ -13,112 +13,113 @@
 
 package blueprint.sdk.experimental.aio;
 
+import blueprint.sdk.logger.Logger;
+import blueprint.sdk.util.Terminatable;
+
 import java.nio.channels.CancelledKeyException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.util.Set;
 
-import blueprint.sdk.logger.Logger;
-import blueprint.sdk.util.Terminatable;
-
 /**
  * Polls a Selector & invokes a task
- * 
+ *
  * @author Sangmin Lee
  * @since 2008. 11. 26.
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class SelectThread extends Thread implements Terminatable {
-	private static final Logger LOGGER = Logger.getInstance();
-	private transient final Selector selector;
+    private static final Logger LOGGER = Logger.getInstance();
+    private transient final Selector selector;
 
-	/** think time to prevent excessive CPU consumption (msec) */
-	private int thinkTime = 10;
-	private boolean running = false;
-	private transient boolean terminated = false;
+    /**
+     * think time to prevent excessive CPU consumption (msec)
+     */
+    private int thinkTime = 10;
+    private boolean running = false;
+    private transient boolean terminated = false;
 
-	public SelectThread(final Selector selector) {
-		this(selector, 10);
-	}
+    public SelectThread(final Selector selector) {
+        this(selector, 10);
+    }
 
-	/**
-	 * Constructor
-	 * 
-	 * @param selector
-	 * @param thinkTime
-	 *            think time to prevent excessive CPU consumption (msec)
-	 */
-	public SelectThread(final Selector selector, final int thinkTime) {
-		super();
-		this.selector = selector;
-		this.thinkTime = thinkTime;
-		setName("SelectThread");
-	}
+    /**
+     * Constructor
+     *
+     * @param selector selector to use
+     * @param thinkTime think time to prevent excessive CPU consumption (msec)
+     */
+    @SuppressWarnings("SameParameterValue")
+    public SelectThread(final Selector selector, final int thinkTime) {
+        super();
+        this.selector = selector;
+        this.thinkTime = thinkTime;
+        setName("SelectThread");
+    }
 
-	public void run() {
-		running = true;
+    public void run() {
+        running = true;
 
-		LOGGER.debug(this, "select thread started");
+        LOGGER.debug(this, "select thread started");
 
-		while (running) {
-			boolean selected;
-			try {
-				selected = selector.selectNow() > 0 ? true : false;
-			} catch (CancelledKeyException ignored) {
-				selected = false;
-			} catch (Exception e) {
-				LOGGER.error(this, "select failed");
-				LOGGER.trace(e);
-				selected = false;
-			}
+        boolean selected;
+        while (running) {
+            try {
+                selected = selector.selectNow() > 0;
+            } catch (CancelledKeyException ignored) {
+                selected = false;
+            } catch (Exception e) {
+                LOGGER.error(this, "select failed");
+                LOGGER.trace(e);
+                selected = false;
+            }
 
-			if (selected) {
-				Set<SelectionKey> keysSet = selector.selectedKeys();
-				Object[] keys = keysSet.toArray();
-				keysSet.clear();
-				for (Object key : keys) {
-					try {
-						process((SelectionKey) key);
-					} catch (CancelledKeyException ignored) {
-						selected = false;
-					} catch (Exception e) {
-						LOGGER.equals(e);
-						LOGGER.trace(e);
-					}
-				}
-			}
+            if (selected) {
+                Set<SelectionKey> keysSet = selector.selectedKeys();
+                Object[] keys = keysSet.toArray();
+                keysSet.clear();
+                for (Object key : keys) {
+                    try {
+                        process((SelectionKey) key);
+                    } catch (CancelledKeyException ignored) {
+                    } catch (Exception e) {
+                        LOGGER.trace(e);
+                    }
+                }
+            }
 
-			// think time to prevent excessive CPU consumption
-			try {
-				Thread.sleep(thinkTime);
-			} catch (InterruptedException ignored) {
-			}
-		}
+            // think time to prevent excessive CPU consumption
+            try {
+                Thread.sleep(thinkTime);
+            } catch (InterruptedException ignored) {
+            }
+        }
 
-		terminated = true;
+        terminated = true;
 
-		LOGGER.debug(this, "select thread stopped");
-	}
+        LOGGER.debug(this, "select thread stopped");
+    }
 
-	/**
-	 * Handle selected key
-	 * 
-	 * @param key
-	 */
-	protected abstract void process(SelectionKey key);
+    /**
+     * Handle selected key
+     *
+     * @param key key to handle
+     */
+    protected abstract void process(SelectionKey key);
 
-	public Selector getSelector() {
-		return selector;
-	}
+    public Selector getSelector() {
+        return selector;
+    }
 
-	public boolean isValid() {
-		return running;
-	}
+    public boolean isValid() {
+        return running;
+    }
 
-	public boolean isTerminated() {
-		return terminated;
-	}
+    public boolean isTerminated() {
+        return terminated;
+    }
 
-	public void terminate() {
-		running = false;
-	}
+    public void terminate() {
+        running = false;
+    }
 }
