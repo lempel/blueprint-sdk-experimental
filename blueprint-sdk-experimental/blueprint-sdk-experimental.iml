@@ -28,7 +28,42 @@
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="module-library">
+      <library name="commons-collections-3.2.1.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/jakarta/commons-collections-3.2.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="commons-dbcp-1.4.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/jakarta/commons-dbcp-1.4.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="commons-pool-1.6.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/jakarta/commons-pool-1.6.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="uka.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/karmi/uka.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntry type="module-library">
       <library name="junit-3.8.1.jar">
         <CLASSES>
@@ -110,8 +145,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="blueprint-sdk" />
-    <orderEntry type="module" module-name="blueprint" />
     <orderEntry type="module-library">
       <library name="servlet-api.jar">
         <CLASSES>
@@ -121,42 +154,9 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library name="commons-collections-3.2.1.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/jakarta/commons-collections-3.2.1.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="commons-dbcp-1.4.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/jakarta/commons-dbcp-1.4.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="commons-pool-1.6.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/jakarta/commons-pool-1.6.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="module" module-name="blueprint-sdk" />
     <orderEntry type="module" module-name="blueprint-sdk-logger" />
-    <orderEntry type="module-library">
-      <library name="uka.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/karmi/uka.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="module" module-name="blueprint" />
   </component>
 </module>
