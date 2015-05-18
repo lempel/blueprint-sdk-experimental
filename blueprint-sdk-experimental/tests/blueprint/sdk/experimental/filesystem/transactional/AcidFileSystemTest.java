@@ -1,12 +1,13 @@
 package blueprint.sdk.experimental.filesystem.transactional;
 
-import org.apache.log4j.Logger;
-
 import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AcidFileSystemTest extends AcidFileSystem {
 
-    private static final Logger L = Logger.getLogger(AcidFileSystemTest.class);
+    private static final Logger L = LoggerFactory.getLogger(AcidFileSystemTest.class);
 
     @SuppressWarnings("FieldCanBeLocal")
     private static final boolean verbose = true;

@@ -3,13 +3,15 @@
  */
 package blueprint.sdk.experimental.aio.sio;
 
-import org.apache.log4j.Logger;
-import uka.transport.MemoryOutputStream;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import uka.transport.MemoryOutputStream;
 
 /**
  * Client Session for comparison
@@ -19,7 +21,7 @@ import java.net.Socket;
  */
 @SuppressWarnings("WeakerAccess")
 public class Session extends Thread {
-    private static final Logger L = Logger.getLogger(Session.class);
+    private static final Logger L = LoggerFactory.getLogger(Session.class);
 
     private transient final Socket sock;
     private transient final DataInputStream dis;
@@ -60,8 +62,7 @@ public class Session extends Thread {
                     }
                 }
             } catch (IOException e) {
-                L.error(e);
-                L.trace(e);
+                L.error("Session IO error", e);
             } finally {
                 try {
                     mos.close();

@@ -13,14 +13,6 @@
 
 package blueprint.sdk.experimental.filesystem.transactional;
 
-import blueprint.sdk.core.concurrent.lock.timestamped.TimestampedLock;
-import blueprint.sdk.core.filesystem.FileSystem;
-import blueprint.sdk.core.filesystem.GenericFileSystem;
-import blueprint.sdk.util.Terminatable;
-import blueprint.sdk.util.jvm.shutdown.TerminatableThread;
-import blueprint.sdk.util.jvm.shutdown.Terminator;
-import org.apache.log4j.Logger;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +20,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import blueprint.sdk.core.concurrent.lock.timestamped.TimestampedLock;
+import blueprint.sdk.core.filesystem.FileSystem;
+import blueprint.sdk.core.filesystem.GenericFileSystem;
+import blueprint.sdk.util.Terminatable;
+import blueprint.sdk.util.jvm.shutdown.TerminatableThread;
+import blueprint.sdk.util.jvm.shutdown.Terminator;
 
 /**
  * ACIDic file system with transactional operations.
@@ -60,7 +62,7 @@ public class AcidFileSystem extends GenericFileSystem {
     /**
      * logger
      */
-    private static final Logger L = Logger.getLogger(AcidFileSystem.class);
+    private static final Logger L = LoggerFactory.getLogger(AcidFileSystem.class);
     /**
      * TTL(Time-To-Live) for {@link AcidFileSystem#openFiles} in milliseconds.<br/>
      * Default value is 10 minutes.

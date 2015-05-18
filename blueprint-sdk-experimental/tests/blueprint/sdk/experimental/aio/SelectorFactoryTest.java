@@ -3,10 +3,11 @@
  */
 package blueprint.sdk.experimental.aio;
 
-import org.apache.log4j.Logger;
-
 import java.io.IOException;
 import java.nio.channels.Selector;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Tests Selector Factory
@@ -15,7 +16,7 @@ import java.nio.channels.Selector;
  * @create 2008. 12. 5.
  */
 public class SelectorFactoryTest {
-    private static final Logger logger = Logger.getLogger(SelectorFactoryTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(SelectorFactoryTest.class);
 
     public static void main(final String[] args) throws IOException {
         long start;

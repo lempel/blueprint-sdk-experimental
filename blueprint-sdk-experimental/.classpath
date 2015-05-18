@@ -17,8 +17,10 @@
 	<classpathentry kind="lib" path="lib/poi/xmlbeans-2.3.0.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/blueprint-sdk"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/blueprint-sdk-logger"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/blueprint"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/blueprint-sdk"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.7.12.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.7.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

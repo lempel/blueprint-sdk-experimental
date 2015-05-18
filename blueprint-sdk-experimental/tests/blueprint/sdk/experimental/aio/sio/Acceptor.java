@@ -3,11 +3,12 @@
  */
 package blueprint.sdk.experimental.aio.sio;
 
-import org.apache.log4j.Logger;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * SIO Acceptor for comparison
@@ -17,7 +18,7 @@ import java.net.Socket;
  */
 @SuppressWarnings("WeakerAccess")
 public class Acceptor extends Thread {
-    private static final Logger L = Logger.getLogger(Acceptor.class);
+    private static final Logger L = LoggerFactory.getLogger(Acceptor.class);
     private final transient ServerSocket ssock;
 
     @SuppressWarnings("SameParameterValue")
@@ -33,8 +34,7 @@ public class Acceptor extends Thread {
                 Socket sock = ssock.accept();
                 new Session(sock).start();
             } catch (IOException e) {
-                L.error(e);
-                L.trace(e);
+                L.error("Can't accept", e);
             }
         }
     }

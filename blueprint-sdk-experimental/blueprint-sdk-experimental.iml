@@ -11,6 +11,8 @@
     <libelement value="jar://$MODULE_DIR$/lib/poi/stax-api-1.0.1.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/poi/xmlbeans-2.3.0.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/servlet-api.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/slf4j-api-1.7.12.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/slf4j-log4j12-1.7.12.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/jakarta/commons-collections-3.2.1.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/jakarta/commons-dbcp-1.4.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/jakarta/commons-pool-1.6.jar!/" />
@@ -149,6 +151,24 @@
       <library name="servlet-api.jar">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/servlet-api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="slf4j-api-1.7.12.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/slf4j-api-1.7.12.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="slf4j-log4j12-1.7.12.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/slf4j-log4j12-1.7.12.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

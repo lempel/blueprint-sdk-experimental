@@ -3,9 +3,11 @@
  */
 package blueprint.sdk.experimental.aio;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import blueprint.sdk.experimental.aio.session.EchoSession;
 import blueprint.sdk.experimental.aio.session.SimpleHttpSession;
-import org.apache.log4j.Logger;
 
 /**
  * Tests Acceptor
@@ -14,7 +16,7 @@ import org.apache.log4j.Logger;
  * @create 2008. 11. 26.
  */
 public class AcceptorTest {
-    private static final Logger L = Logger.getLogger(AcceptorTest.class);
+    private static final Logger L = LoggerFactory.getLogger(AcceptorTest.class);
 
     public static void main(final String[] args) {
 
@@ -29,7 +31,7 @@ public class AcceptorTest {
             service1.getIpFilter().allow("127.0.0.1");
             service2.bind("127.0.0.1", 1113, true, 5);
         } catch (Exception e) {
-            L.trace(e);
+            L.trace("bind error", e);
         }
     }
 }
